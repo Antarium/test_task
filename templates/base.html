@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <meta content="telephone=no" name="format-detection">
+  <title>Sketches</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+</head>
+<body>
+  <h1>
+    Тестовое задание
+  </h1>
+  <div class="all_width_block">
+    <div id="left_panel" class="info_block">&nbsp</div>
+    <div id="info_panel" class="info_block">
+      {% block content %} {% endblock %}
+      <div class="block_footer">&nbsp</div>
+    </div>
+    <div div="right_panel" class="info_block">
+      <div id="header_panel">
+        <strong>{{current_user.username}}</strong>
+      </div>
+      <div class="manager_panel">
+        Выберите пользователя:<br>
+        <ul>
+          {% for user in user_list %}
+            <li><a href="{% url 'change_user' user_id=user.pk %}">{{user.username}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="filter_block">
+      <a href="{% url 'index_page' %}" class="a_title"><strong>ВСЕ</strong></a>
+      <a href="{% url 'filter_page' q=1 %}" class="a_title"><strong>НОВОСТИ({{news_count}})</strong></a>
+      <a href="{% url 'filter_page' q=0 %}" class="a_title"><strong>СТАТЬИ({{articles_count}})</strong></a>
+    </div>
+    <hr>
+    <div class="content_block">
+      {% for inst in object_list %}
+        <div class="content_block text_block">
+          <div class="content_block">
+            <h3><a href="{% url 'current_article' pk=inst.id %}" class="a_title">{{inst.title}}</a></h3>
+            {{inst.preview|safe}}
+            <div class="content_block">
+              <div class="block_author">
+                {{inst.author}}
+                {{inst.published_at}}
+              </div>
+              <div class="block_likes">
+                <img src="{% static 'img/like.png' %}" alt="like" class="img_likes"> {{inst.like}}
+                <img src="{% static 'img/dislike.png' %}" alt="dislike" class="img_likes"> {{inst.dislike}}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+{% endblock %}

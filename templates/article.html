@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<h2>{{article.title}}</h2>
+<p><i>{{article.author}}&nbsp{{article.published_at}}</i></p>
+{{article.text|safe}}
+<div class="block_likes">
+  <a href="#" class="a_likes" onClick="ArticleLike('positive')">
+    <img src="{% static 'img/like.png' %}" alt="like" class="img_likes">
+  </a><span id="article_like">{{article.like}}</span>
+  <a href="#" class="a_likes" onClick="ArticleLike('negative')">
+    <img src="{% static 'img/dislike.png' %}" alt="dislike" class="img_likes">
+  </a><span id="article_dislike">{{article.dislike}}</span>
+</div>
+{% if comment_list %}
+  <div class="content_block">
+    <h3>Комментарии:</h3>
+  </div>
+  {% for comment in comment_list %}
+    <div class="content_block text_block border_comment">
+      <div class="content_block">
+        <div class="block_author">
+          {% if comment.author %}
+            <strong>{{comment.author}}</strong>
+          {% else %}
+            <strong>Anonimous</strong>
+          {% endif %}
+          &nbsp<i>{{comment.created_at}}</i>
+        </div>
+        <div class="block_likes">
+          <a href="#" class="a_likes" onClick="CommentLike('positive',{{comment.id}})">
+            <img src="{% static 'img/like.png' %}" alt="like" class="img_likes">
+          </a><span id="comment_like_{{comment.id}}">{{comment.like}}</span>
+          <a href="#" class="a_likes" onClick="CommentLike('negative',{{comment.id}})">
+            <img src="{% static 'img/dislike.png' %}" alt="dislike" class="img_likes">
+          </a><span id="comment_dislike_{{comment.id}}">{{comment.dislike}}</span>
+        </div>
+      </div>
+      <div class="content_block">
+        {{comment.text|safe}}
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+<div class="content_block text_block border_comment">
+  <h3>Ваш комментарий:</h3>
+  <form class="" action="{% url 'current_article' pk=article.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="text_comment" class="text_comment" rows="8"></textarea>
+    <p>
+      <input type="submit" value="Отправить">
+      <input type="reset" value="Очистиь">
+    </p>
+  </form>
+</div>
+
+{% endblock %}
