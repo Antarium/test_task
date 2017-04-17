@@ -6,6 +6,8 @@
 <p><i>{{article.author}}&nbsp{{article.published_at}}</i></p>
 {{article.text|safe}}
 <div class="block_likes">
+  всего:
+  <span id="article_like_all">{{article.like|add:article.dislike}}</span>
   <a href="#" class="a_likes" onClick="ArticleLike('positive')">
     <img src="{% static 'img/like.png' %}" alt="like" class="img_likes">
   </a><span id="article_like">{{article.like}}</span>
@@ -29,6 +31,8 @@
           &nbsp<i>{{comment.created_at}}</i>
         </div>
         <div class="block_likes">
+          всего: 
+          <span id="comment_like_all_{{comment.id}}">{{comment.like|add:comment.dislike}}</span>
           <a href="#" class="a_likes" onClick="CommentLike('positive',{{comment.id}})">
             <img src="{% static 'img/like.png' %}" alt="like" class="img_likes">
           </a><span id="comment_like_{{comment.id}}">{{comment.like}}</span>

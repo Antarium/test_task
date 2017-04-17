@@ -56,6 +56,23 @@ class CurrentArticle(DetailView):
         else:
             user_id = active_user.get('id', None)
             if self.request.GET.get('t_content', 'article') == 'article':
+                content_id = self.object.pk
+                content_type = 0
+            else:
+                content_id = self.request.GET.get('comment_id', None)
+                content_type = 1
+            reviews = Reviews.objects.filter(content_type=content_type, user_id=user_id,
+                                              content_id=content_id).first()
+            like = True if self.request.GET.get('t_like') == 'positive' else False
+            if not reviews:
+                reviews = Reviews(user_id=user_id, content_id=content_id,
+                                content_type=content_type)
+            state_likes = reviews.add_like(like)
+            #reviews.save()
+            return HttpResponse(json.dumps(state_likes))
+            """
+            user_id = active_user.get('id', None)
+            if self.request.GET.get('t_content', 'article') == 'article':
                 content = self.object
                 content_id = self.object.pk
                 content_type = 0
@@ -93,6 +110,7 @@ class CurrentArticle(DetailView):
             content.dislike = state_likes['dislike']
             content.save()
             return HttpResponse(json.dumps(state_likes))
+            """
 
     def render_to_response(self, context, **response_kwargs):
         if not self.request.is_ajax():
