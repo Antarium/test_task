@@ -68,49 +68,7 @@ class CurrentArticle(DetailView):
                 reviews = Reviews(user_id=user_id, content_id=content_id,
                                 content_type=content_type)
             state_likes = reviews.add_like(like)
-            #reviews.save()
             return HttpResponse(json.dumps(state_likes))
-            """
-            user_id = active_user.get('id', None)
-            if self.request.GET.get('t_content', 'article') == 'article':
-                content = self.object
-                content_id = self.object.pk
-                content_type = 0
-                reviews = Reviews.objects.filter(content_type=0, user_id=user_id,
-                                                content_id=content_id).first()
-                state_likes ={'like': self.object.like, 'dislike': self.object.dislike}
-            else:
-                content_id = self.request.GET.get('comment_id', None)
-                content = Comments.objects.filter(id=content_id).first()
-                content_type = 1
-                reviews = Reviews.objects.filter(content_type=1, user_id=user_id,
-                                                content_id=content_id).first()
-                state_likes = Comments.objects.filter(id = content_id).values('like', 'dislike').first()
-            like = True if self.request.GET.get('t_like') == 'positive' else False
-            if not reviews:
-                #отклика для этого поста у выбранного пользователя пока нет
-                rev = Reviews(user_id=user_id, content_id=content_id,
-                                content_type=content_type, review=like)
-                rev.save()
-                if like:
-                    state_likes['like'] += 1
-                else:
-                    state_likes['dislike'] += 1
-            else:
-                #отклик есть, но не совпадает
-                if like < reviews.review:
-                    state_likes['like'] -= 1
-                    state_likes['dislike'] += 1
-                elif like > reviews.review:
-                    state_likes['like'] += 1
-                    state_likes['dislike'] -= 1
-                reviews.review = like
-                reviews.save()
-            content.like = state_likes['like']
-            content.dislike = state_likes['dislike']
-            content.save()
-            return HttpResponse(json.dumps(state_likes))
-            """
 
     def render_to_response(self, context, **response_kwargs):
         if not self.request.is_ajax():
